@@ -20,6 +20,8 @@ Parse.Cloud.define('getReplyMsg', function(request, response) {
                              console.log("contents:"+contents);
 
                              var replyCount = contents.length;
+                             console.log("replyCount:"+replyCount);
+
                              if (replyCount == 0) {
                                //response.success({"msg":msgFromUser,"replyMsg":""});
                                console.log("resultReplyMsg:"+"0");
