@@ -5,7 +5,7 @@ Parse.Cloud.define('hello', function(req, res) {
 });
 
 Parse.Cloud.define('testMsg', function(req, res) {
-  var msgFromUser = request.params.msg;
+  var msgFromUser = req.params.msg;
   console.log("msg from user:"+msgFromUser);
   res.success(msgFromUser);
 });
