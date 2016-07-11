@@ -8,6 +8,7 @@ Parse.Cloud.define('getReplyMsg', function(request, response) {
                    var MSG = Parse.Object.extend("Message");
                    var query = new Parse.Query(MSG);
                    var msgFromUser = request.params.msg;
+                   console.log("request:"+request);
                    console.log("msg from user:"+msgFromUser);
 
                    query.equalTo("msg", msgFromUser);
