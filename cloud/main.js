@@ -4,6 +4,12 @@ Parse.Cloud.define('hello', function(req, res) {
   res.success('Hi');
 });
 
+Parse.Cloud.define('testMsg', function(req, res) {
+  var msgFromUser = request.params.msg;
+  console.log("msg from user:"+msgFromUser);
+  res.success(msgFromUser);
+});
+
 Parse.Cloud.define('getReplyMsg', function(request, response) {
                    var MSG = Parse.Object.extend("Message");
                    var query = new Parse.Query(MSG);
