@@ -14,17 +14,19 @@ Parse.Cloud.define('getReplyMsg', function(request, response) {
                    query.equalTo("msg", msgFromUser);
                    query.find({
                              success: function(msgResponse) {
-                             var contents = [];
-                             contents = msgResponse.get("replyMsg").toString();
-                             console.log("msgResponse:"+msgResponse+"\nconntent:"+contents);
-
+                             //var contents = [];
+                             //contents = msgResponse.get("replyMsg").toString();
+                             console.log("msgResponse:"+msgResponse);
+                             /*
                              var replyCount = contents.length;
                              if (replyCount == 0) {
                                response.success({"msg":msgFromUser,"replyMsg":""});
                              }else {
                                var resultReplyMsg = contents[(Math.random() * replyCount) + 0].toString()
                                response.success({"msg":msgFromUser,"replyMsg":resultReplyMsg});
-                             }
+                             }*/
+                             response.success(msgResponse);
+
                              },
                              error: function() {
                              response.error("get replyMsg failed");
