@@ -6,7 +6,7 @@ Parse.Cloud.define('hello', function(req, res) {
 Parse.Cloud.define('getReplyMsg', function(request, response) {
 
                    var MSG = Parse.Object.extend("Message");
-                   var query = new Parse.Query(DR);
+                   var query = new Parse.Query(MSG);
                    var msgFromUser = request.params.msg;
                    query.equalTo("msg", msgFromUser);
                    query.get(driverId, {
