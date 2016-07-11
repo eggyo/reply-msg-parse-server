@@ -9,7 +9,7 @@ Parse.Cloud.define('getReplyMsg', function(request, response) {
                    var query = new Parse.Query(MSG);
                    var msgFromUser = request.params.msg;
                    query.equalTo("msg", msgFromUser);
-                   query.get(driverId, {
+                   query.find({
                              success: function(msgResponse) {
                              var contents = [];
                              contents = msgResponse.get("replyMsg").toString();
