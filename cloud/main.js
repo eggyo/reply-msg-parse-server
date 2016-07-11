@@ -21,12 +21,16 @@ Parse.Cloud.define('getReplyMsg', function(request, response) {
 
                              var replyCount = contents.length;
                              if (replyCount == 0) {
-                               response.success({"msg":msgFromUser,"replyMsg":""});
+                               //response.success({"msg":msgFromUser,"replyMsg":""});
+                               console.log("resultReplyMsg:"+"0");
+
                              }else {
-                               var resultReplyMsg = contents[(Math.random() * replyCount) + 0].toString()
-                               response.success({"msg":msgFromUser,"replyMsg":resultReplyMsg});
+                               var resultReplyMsg = contents[(Math.random() * replyCount) + 0].toString();
+                               //response.success({"msg":msgFromUser,"replyMsg":resultReplyMsg});
+                               console.log("resultReplyMsg:"+resultReplyMsg);
+
                              }
-                             //response.success(msgResponse);
+                             response.success(msgResponse);
 
                              },
                              error: function() {
