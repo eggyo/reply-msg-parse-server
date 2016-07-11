@@ -27,7 +27,9 @@ Parse.Cloud.define('getReplyMsg', function(request, response) {
                                console.log("resultReplyMsg:"+"0");
 
                              }else {
-                               var resultReplyMsg = contents[(Math.random() * replyCount) + 0];
+                               var randomIndex = Math.floor((Math.random() * replyCount) + 0);
+                               console.log("randomIndex:"+randomIndex);
+                               var resultReplyMsg = contents[randomIndex].toString();
                                //response.success({"msg":msgFromUser,"replyMsg":resultReplyMsg});
                                console.log("resultReplyMsg:"+resultReplyMsg);
 
