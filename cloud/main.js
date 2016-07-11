@@ -15,7 +15,7 @@ Parse.Cloud.define('getReplyMsg', function(request, response) {
                              success: function(msgResponse) {
                              var contents = [];
                              contents = msgResponse.get("replyMsg").toString();
-                             console.log("msgResponse:"+msgResponse"\nconntent:"+contents);
+                             console.log("msgResponse:"+msgResponse+"\nconntent:"+contents);
 
                              var replyCount = contents.length;
                              if (replyCount == 0) {
