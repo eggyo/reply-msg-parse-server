@@ -72,7 +72,7 @@ Parse.Cloud.define('botTraining', function(request, response) {
                          msgOBJ.set("msg",msgFromUser);
                          msgOBJ.set("replyMsg",[replyMsgFromUser]);
                          msgOBJ.save(null, {
-                                     success: function() {
+                                     success: function(success) {
                                      response.success("DONE");
                                      },
                                      error: function(error) {
@@ -85,7 +85,7 @@ Parse.Cloud.define('botTraining', function(request, response) {
                          msgOBJ = msgResponse[0];
                          msgOBJ.addUnique("replyMsg",replyMsgFromUser);
                          msgOBJ.save(null, {
-                                     success: function() {
+                                     success: function(success) {
                                      response.success("DONE");
                                      },
                                      error: function(error) {
