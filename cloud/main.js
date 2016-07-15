@@ -83,7 +83,9 @@ Parse.Cloud.define('botTraining', function(request, response) {
                          // put another reply
                          var msgOBJ = new MSG();
                          msgOBJ = msgResponse[0];
-                         msgOBJ.addUnique("replyMsg",replyMsgFromUser);
+                         for(var i=0;i < replyMsgFromUser.length;i++){
+                            msgOBJ.addUnique("replyMsg",replyMsgFromUser[i]);
+                         }
                          msgOBJ.save(null, {
                                      success: function(success) {
                                        response.success({"msg":msgFromUser,"replyMsg":replyMsgFromUser});
