@@ -70,7 +70,7 @@ Parse.Cloud.define('botTraining', function(request, response) {
                          // add new msg
                          var msgOBJ = new MSG();
                          msgOBJ.set("msg",msgFromUser);
-                         msgOBJ.set("replyMsg",[replyMsgFromUser]);
+                         msgOBJ.set("replyMsg",replyMsgFromUser);
                          msgOBJ.save(null, {
                                      success: function() {
                                      response.success("DONE");
