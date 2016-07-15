@@ -7,7 +7,7 @@ Parse.Cloud.define('hello', function(req, res) {
 Parse.Cloud.define('testMsg', function(req, res) {
   var msgFromUser = req.params.msg;
   console.log("msg from user:"+msgFromUser);
-  res.success(msgFromUser);
+  res.success({"msg":msgFromUser,"replyMsg":"FUCK"});
 });
 
 Parse.Cloud.define('getReplyMsg', function(request, response) {
@@ -72,8 +72,8 @@ Parse.Cloud.define('botTraining', function(request, response) {
                          msgOBJ.set("msg",msgFromUser);
                          msgOBJ.set("replyMsg",replyMsgFromUser);
                          msgOBJ.save(null, {
-                                     success: function() {
-                                     response.success("DONE");
+                                     success: function(success) {
+                                     response.success({"msg":msgFromUser,"replyMsg":replyMsgFromUser});
                                      },
                                      error: function(error) {
                                      response.error("save failed : "+error.code);
@@ -85,8 +85,8 @@ Parse.Cloud.define('botTraining', function(request, response) {
                          msgOBJ = msgResponse[0];
                          msgOBJ.addUnique("replyMsg",replyMsgFromUser);
                          msgOBJ.save(null, {
-                                     success: function() {
-                                     response.success("DONE");
+                                     success: function(success) {
+                                       response.success({"msg":msgFromUser,"replyMsg":replyMsgFromUser});
                                      },
                                      error: function(error) {
                                      response.error("save failed : "+error.code);
