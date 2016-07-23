@@ -77,7 +77,7 @@ Parse.Cloud.define('botTraining', function(request, response) {
                            msgOBJ.set("msg",_msg);
                            msgOBJ.set("replyMsg",replyMsgFromUser);
                            objs.push(msgOBJ);
-                           console.log("new msg");
+                           console.log("new msg :"+_msg);
 
                          }else {
                            // put another reply
@@ -86,7 +86,7 @@ Parse.Cloud.define('botTraining', function(request, response) {
                            for(var i=0;i < replyMsgFromUser.length;i++){
                               msgOBJ.addUnique("replyMsg",replyMsgFromUser[i]);
                            }
-                           console.log("exist msg");
+                           console.log("exist msg :"+_msg);
                            objs.push(msgOBJ);
                          }
                          //response.success(msgResponse);
