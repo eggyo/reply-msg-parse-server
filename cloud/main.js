@@ -63,8 +63,8 @@ Parse.Cloud.define('botTraining', function(request, response) {
                    }else {
                      for(var i=0;i < msgFromUser.length;i++){
                        console.log("msg index:"+i+" => "+msgFromUser[i]);
-
-                       query.equalTo("msg", msgFromUser[i]);
+                       var _msg = msgFromUser[i];
+                       query.equalTo("msg", _msg);
                        query.limit(appQueryLimit);
                        query.find({
                          success: function(msgResponse) {
@@ -72,12 +72,12 @@ Parse.Cloud.define('botTraining', function(request, response) {
                          if (msgResponse.length == 0) {
                            // add new msg
                            var msgOBJ = new MSG();
-                           msgOBJ.set("msg",msgFromUser[i]);
+                           msgOBJ.set("msg",_msg);
                            msgOBJ.set("replyMsg",replyMsgFromUser);
                            msgOBJ.save(null, {
                                        success: function(success) {
-                                       response.success({"msg":msgFromUser[i],"replyMsg":replyMsgFromUser});
-                                       console.log("index:"+i+" => msg:"+msgFromUser[i]+" replyMsg"+replyMsgFromUser);
+                                       response.success({"msg":_msg,"replyMsg":replyMsgFromUser});
+                                       console.log("index:"+i+" => msg:"+_msg+" replyMsg"+replyMsgFromUser);
 
                                        },
                                        error: function(error) {
@@ -95,7 +95,7 @@ Parse.Cloud.define('botTraining', function(request, response) {
                            }
                            msgOBJ.save(null, {
                                        success: function(success) {
-                                         response.success({"msg":msgFromUser[i],"replyMsg":replyMsgFromUser});
+                                         response.success({"msg":_msg,"replyMsg":replyMsgFromUser});
                                        },
                                        error: function(error) {
                                        response.error("save failed : "+error.code);
