@@ -60,11 +60,9 @@ Parse.Cloud.define('botTraining', function(request, response) {
                    if (replyMsgFromUser == null || msgFromUser == null) {
                      response.error("request null values");
                    }else {
-                     var objs = [];
-
                      for(var i=0;i < msgFromUser.length;i++){
-                       var query = new Parse.Query(MSG);
                        console.log("msg index:"+i+" => "+msgFromUser[i]);
+                       var query = new Parse.Query(MSG);
                        var _msg = msgFromUser[i];
                        query.equalTo("msg", _msg);
                        query.limit(appQueryLimit);
@@ -76,9 +74,18 @@ Parse.Cloud.define('botTraining', function(request, response) {
                            var msgOBJ = new MSG();
                            msgOBJ.set("msg",_msg);
                            msgOBJ.set("replyMsg",replyMsgFromUser);
-                           objs.push(msgOBJ);
-                           console.log("new msg :"+_msg);
+                           msgOBJ.save(null, {
+                                       success: function(success) {
+                                       response.success({"msg":_msg,"replyMsg":replyMsgFromUser});
+                                       console.log("index:"+i+" => msg:"+_msg+" replyMsg"+replyMsgFromUser);
 
+                                       },
+                                       error: function(error) {
+                                       response.error("save failed : "+error.code);
+                                       console.log("error index:"+i+" => "+error);
+
+                                       }
+                                       });
                          }else {
                            // put another reply
                            var msgOBJ = new MSG();
@@ -86,8 +93,14 @@ Parse.Cloud.define('botTraining', function(request, response) {
                            for(var i=0;i < replyMsgFromUser.length;i++){
                               msgOBJ.addUnique("replyMsg",replyMsgFromUser[i]);
                            }
-                           console.log("exist msg :"+_msg);
-                           objs.push(msgOBJ);
+                           msgOBJ.save(null, {
+                                       success: function(success) {
+                                         response.success({"msg":_msg,"replyMsg":replyMsgFromUser});
+                                       },
+                                       error: function(error) {
+                                       response.error("save failed : "+error.code);
+                                       }
+                                       });
                          }
                          //response.success(msgResponse);
                          },
@@ -96,13 +109,5 @@ Parse.Cloud.define('botTraining', function(request, response) {
                          }
                        });
                      }// end for loop
-                     Parse.Object.saveAll(objs)
-                     .then(function() {
-                       response.success({"msg":_msg,"replyMsg":replyMsgFromUser});
-                       console.log('all saved');
-                     }, function(error) {
-                       response.error("save failed : "+error.code);
-                       console.error(error);
-                     });
                    }// end else
 });
