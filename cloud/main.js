@@ -60,54 +60,49 @@ Parse.Cloud.define('botTraining', function(request, response) {
                    if (replyMsgFromUser == null || msgFromUser == null) {
                      response.error("request null values");
                    }else {
-                     for(var i=0;i < msgFromUser.length;i++){
-                       console.log("msg index:"+i+" => "+msgFromUser[i]);
-                       var query = new Parse.Query(MSG);
-                       var _msg = msgFromUser[i];
-                       query.equalTo("msg", _msg);
-                       query.limit(appQueryLimit);
-                       query.find({
-                         success: function(msgResponse) {
-                         var contents = [];
-                         if (msgResponse.length == 0) {
-                           // add new msg
-                           var msgOBJ = new MSG();
-                           msgOBJ.set("msg",_msg);
-                           msgOBJ.set("replyMsg",replyMsgFromUser);
-                           msgOBJ.save(null, {
-                                       success: function(success) {
-                                       response.success({"msg":_msg,"replyMsg":replyMsgFromUser});
-                                       console.log("index:"+i+" => msg:"+_msg+" replyMsg"+replyMsgFromUser);
-
-                                       },
-                                       error: function(error) {
-                                       response.error("save failed : "+error.code);
-                                       console.log("error index:"+i+" => "+error);
-
-                                       }
-                                       });
-                         }else {
-                           // put another reply
-                           var msgOBJ = new MSG();
-                           msgOBJ = msgResponse[0];
-                           for(var i=0;i < replyMsgFromUser.length;i++){
-                              msgOBJ.addUnique("replyMsg",replyMsgFromUser[i]);
-                           }
-                           msgOBJ.save(null, {
-                                       success: function(success) {
-                                         response.success({"msg":_msg,"replyMsg":replyMsgFromUser});
-                                       },
-                                       error: function(error) {
-                                       response.error("save failed : "+error.code);
-                                       }
-                                       });
+                     var query = new Parse.Query(MSG);
+                     query.containedIn("msg", msgFromUser);
+                     query.limit(appQueryLimit);
+                     query.find({
+                       success: function(msgResponse) {
+                       var contents = [];
+                       if (msgResponse.length == 0) {
+                         // add new msg
+                         var msgOBJ = new MSG();
+                         msgOBJ.set("msg",msgFromUser);
+                         msgOBJ.set("replyMsg",replyMsgFromUser);
+                         msgOBJ.save(null, {
+                                     success: function(success) {
+                                     response.success({"msg":msgFromUser,"replyMsg":replyMsgFromUser});
+                                     },
+                                     error: function(error) {
+                                     response.error("save failed : "+error.code);
+                                     }
+                                     });
+                       }else {
+                         // put another reply
+                         var msgOBJ = new MSG();
+                         msgOBJ = msgResponse[0];
+                         for(var i=0;i < msgFromUser.length;i++){
+                            msgOBJ.addUnique("msg",msgFromUser[i]);
                          }
-                         //response.success(msgResponse);
-                         },
-                         error: function() {
-                         response.error("get replyMsg failed");
+                         for(var i=0;i < replyMsgFromUser.length;i++){
+                            msgOBJ.addUnique("replyMsg",replyMsgFromUser[i]);
                          }
-                       });
-                     }// end for loop
+                         msgOBJ.save(null, {
+                                     success: function(success) {
+                                       response.success({"msg":msgFromUser,"replyMsg":replyMsgFromUser});
+                                     },
+                                     error: function(error) {
+                                     response.error("save failed : "+error.code);
+                                     }
+                                     });
+                       }
+                       //response.success(msgResponse);
+                       },
+                       error: function() {
+                       response.error("get replyMsg failed");
+                       }
+                     });
                    }// end else
 });
