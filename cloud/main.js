@@ -62,6 +62,8 @@ Parse.Cloud.define('botTraining', function(request, response) {
                      response.error("request null values");
                    }else {
                      for(var i=0;i < msgFromUser.length;i++){
+                       console.log("msg index:"+i+" => "+msgFromUser[i]);
+
                        query.equalTo("msg", msgFromUser[i]);
                        query.limit(appQueryLimit);
                        query.find({
@@ -75,9 +77,13 @@ Parse.Cloud.define('botTraining', function(request, response) {
                            msgOBJ.save(null, {
                                        success: function(success) {
                                        response.success({"msg":msgFromUser[i],"replyMsg":replyMsgFromUser});
+                                       console.log("index:"+i+" => "+"msg":msgFromUser[i],"replyMsg":replyMsgFromUser);
+
                                        },
                                        error: function(error) {
                                        response.error("save failed : "+error.code);
+                                       console.log("error index:"+i+" => "+error);
+
                                        }
                                        });
                          }else {
