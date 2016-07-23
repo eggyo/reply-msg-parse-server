@@ -61,6 +61,8 @@ Parse.Cloud.define('botTraining', function(request, response) {
                    if (replyMsgFromUser == null || msgFromUser == null) {
                      response.error("request null values");
                    }else {
+                     var objs = [];
+
                      for(var i=0;i < msgFromUser.length;i++){
                        console.log("msg index:"+i+" => "+msgFromUser[i]);
                        var _msg = msgFromUser[i];
@@ -74,18 +76,8 @@ Parse.Cloud.define('botTraining', function(request, response) {
                            var msgOBJ = new MSG();
                            msgOBJ.set("msg",_msg);
                            msgOBJ.set("replyMsg",replyMsgFromUser);
-                           msgOBJ.save(null, {
-                                       success: function(success) {
-                                       response.success({"msg":_msg,"replyMsg":replyMsgFromUser});
-                                       console.log("index:"+i+" => msg:"+_msg+" replyMsg"+replyMsgFromUser);
-
-                                       },
-                                       error: function(error) {
-                                       response.error("save failed : "+error.code);
-                                       console.log("error index:"+i+" => "+error);
-
-                                       }
-                                       });
+                           objs.push(msgOBJ);
+                           
                          }else {
                            // put another reply
                            var msgOBJ = new MSG();
@@ -93,15 +85,17 @@ Parse.Cloud.define('botTraining', function(request, response) {
                            for(var i=0;i < replyMsgFromUser.length;i++){
                               msgOBJ.addUnique("replyMsg",replyMsgFromUser[i]);
                            }
-                           msgOBJ.save(null, {
-                                       success: function(success) {
-                                         response.success({"msg":_msg,"replyMsg":replyMsgFromUser});
-                                       },
-                                       error: function(error) {
-                                       response.error("save failed : "+error.code);
-                                       }
-                                       });
+                           objs.push(msgOBJ);
+
                          }
+                         Parse.Object.saveAll(objs)
+                         .then(function() {
+                           response.success({"msg":_msg,"replyMsg":replyMsgFromUser});
+                           console.log('all saved');
+                         }, function(error) {
+                           response.error("save failed : "+error.code);
+                           console.error(error);
+                         });
                          //response.success(msgResponse);
                          },
                          error: function() {
