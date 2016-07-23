@@ -77,7 +77,7 @@ Parse.Cloud.define('botTraining', function(request, response) {
                            msgOBJ.save(null, {
                                        success: function(success) {
                                        response.success({"msg":msgFromUser[i],"replyMsg":replyMsgFromUser});
-                                       console.log("index:"+i+" => "+"msg":msgFromUser[i],"replyMsg":replyMsgFromUser);
+                                       console.log("index:"+i+" => msg:"+msgFromUser[i]+" replyMsg"+replyMsgFromUser);
 
                                        },
                                        error: function(error) {
