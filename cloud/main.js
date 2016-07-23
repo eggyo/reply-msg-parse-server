@@ -77,7 +77,8 @@ Parse.Cloud.define('botTraining', function(request, response) {
                            msgOBJ.set("msg",_msg);
                            msgOBJ.set("replyMsg",replyMsgFromUser);
                            objs.push(msgOBJ);
-                           
+                           console.log("new msg");
+
                          }else {
                            // put another reply
                            var msgOBJ = new MSG();
@@ -85,17 +86,9 @@ Parse.Cloud.define('botTraining', function(request, response) {
                            for(var i=0;i < replyMsgFromUser.length;i++){
                               msgOBJ.addUnique("replyMsg",replyMsgFromUser[i]);
                            }
+                           console.log("exist msg");
                            objs.push(msgOBJ);
-
                          }
-                         Parse.Object.saveAll(objs)
-                         .then(function() {
-                           response.success({"msg":_msg,"replyMsg":replyMsgFromUser});
-                           console.log('all saved');
-                         }, function(error) {
-                           response.error("save failed : "+error.code);
-                           console.error(error);
-                         });
                          //response.success(msgResponse);
                          },
                          error: function() {
@@ -103,5 +96,13 @@ Parse.Cloud.define('botTraining', function(request, response) {
                          }
                        });
                      }// end for loop
+                     Parse.Object.saveAll(objs)
+                     .then(function() {
+                       response.success({"msg":_msg,"replyMsg":replyMsgFromUser});
+                       console.log('all saved');
+                     }, function(error) {
+                       response.error("save failed : "+error.code);
+                       console.error(error);
+                     });
                    }// end else
 });
