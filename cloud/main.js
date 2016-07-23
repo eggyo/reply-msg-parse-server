@@ -54,7 +54,6 @@ Parse.Cloud.define('getReplyMsg', function(request, response) {
 
 Parse.Cloud.define('botTraining', function(request, response) {
                    var MSG = Parse.Object.extend("Message");
-                   var query = new Parse.Query(MSG);
                    var msgFromUser = request.params.msg;
                    var replyMsgFromUser = request.params.replyMsg;
                    console.log("msg from user:"+msgFromUser+"\nreplyMsgFromUser:"+replyMsgFromUser);
@@ -64,6 +63,7 @@ Parse.Cloud.define('botTraining', function(request, response) {
                      var objs = [];
 
                      for(var i=0;i < msgFromUser.length;i++){
+                       var query = new Parse.Query(MSG);
                        console.log("msg index:"+i+" => "+msgFromUser[i]);
                        var _msg = msgFromUser[i];
                        query.equalTo("msg", _msg);
