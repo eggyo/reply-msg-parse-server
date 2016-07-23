@@ -61,45 +61,47 @@ Parse.Cloud.define('botTraining', function(request, response) {
                    if (replyMsgFromUser == null || msgFromUser == null) {
                      response.error("request null values");
                    }else {
-                     query.equalTo("msg", msgFromUser);
-                     query.limit(appQueryLimit);
-                     query.find({
-                       success: function(msgResponse) {
-                       var contents = [];
-                       if (msgResponse.length == 0) {
-                         // add new msg
-                         var msgOBJ = new MSG();
-                         msgOBJ.set("msg",msgFromUser);
-                         msgOBJ.set("replyMsg",replyMsgFromUser);
-                         msgOBJ.save(null, {
-                                     success: function(success) {
-                                     response.success({"msg":msgFromUser,"replyMsg":replyMsgFromUser});
-                                     },
-                                     error: function(error) {
-                                     response.error("save failed : "+error.code);
-                                     }
-                                     });
-                       }else {
-                         // put another reply
-                         var msgOBJ = new MSG();
-                         msgOBJ = msgResponse[0];
-                         for(var i=0;i < replyMsgFromUser.length;i++){
-                            msgOBJ.addUnique("replyMsg",replyMsgFromUser[i]);
+                     for(var i=0;i < msgFromUser.length;i++){
+                       query.equalTo("msg", msgFromUser[i]);
+                       query.limit(appQueryLimit);
+                       query.find({
+                         success: function(msgResponse) {
+                         var contents = [];
+                         if (msgResponse.length == 0) {
+                           // add new msg
+                           var msgOBJ = new MSG();
+                           msgOBJ.set("msg",msgFromUser[i]);
+                           msgOBJ.set("replyMsg",replyMsgFromUser);
+                           msgOBJ.save(null, {
+                                       success: function(success) {
+                                       response.success({"msg":msgFromUser[i],"replyMsg":replyMsgFromUser});
+                                       },
+                                       error: function(error) {
+                                       response.error("save failed : "+error.code);
+                                       }
+                                       });
+                         }else {
+                           // put another reply
+                           var msgOBJ = new MSG();
+                           msgOBJ = msgResponse[0];
+                           for(var i=0;i < replyMsgFromUser.length;i++){
+                              msgOBJ.addUnique("replyMsg",replyMsgFromUser[i]);
+                           }
+                           msgOBJ.save(null, {
+                                       success: function(success) {
+                                         response.success({"msg":msgFromUser[i],"replyMsg":replyMsgFromUser});
+                                       },
+                                       error: function(error) {
+                                       response.error("save failed : "+error.code);
+                                       }
+                                       });
                          }
-                         msgOBJ.save(null, {
-                                     success: function(success) {
-                                       response.success({"msg":msgFromUser,"replyMsg":replyMsgFromUser});
-                                     },
-                                     error: function(error) {
-                                     response.error("save failed : "+error.code);
-                                     }
-                                     });
-                       }
-                       //response.success(msgResponse);
-                       },
-                       error: function() {
-                       response.error("get replyMsg failed");
-                       }
-                     });
-                   }
+                         //response.success(msgResponse);
+                         },
+                         error: function() {
+                         response.error("get replyMsg failed");
+                         }
+                       });
+                     }// end for loop
+                   }// end else
 });
