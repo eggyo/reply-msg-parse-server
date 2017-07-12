@@ -235,9 +235,9 @@ Parse.Cloud.define("createCharArray", function(request, response) {
     //object.save();
     console.log(JSON.stringify(object.get('msg')));
   }).then(function(success) {
-    request.success("OK");
+    response.success("OK");
   }, function(err) {
-    request.error(err);
+    response.error(err);
   });
 
 
