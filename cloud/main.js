@@ -238,7 +238,7 @@ Parse.Cloud.define("createCharArray", function(request, response) {
 
           _.each(res, function(obj) { // use underscore, its better :)
             promise = promise.then(function() { // each time this loops the promise gets reassigned to the function below
-              console.log("obj msg:" + obj.msg);
+              console.log("obj msg:" + JSON.stringify(obj.msg));
 
             }); // edit: missing these guys
           });
