@@ -1,4 +1,6 @@
 var appQueryLimit = 9999;
+var wordcut = require("wordcut");
+wordcut.init();
 
 Parse.Cloud.define('hello', function(req, res) {
   res.success('Hi');
@@ -248,6 +250,7 @@ Parse.Cloud.define("findBestReplyMsgFromCharSet", function(request, response) {
   var query = new Parse.Query(MSG);
   var msgFromUser = request.params.msg;
   let arr = Array.from(msgFromUser);
+  console.log(wordcut.cut(msgFromUser));
 
   console.log("request:" + request.params["msg"]);
   console.log("msg from user:" + msgFromUser);
