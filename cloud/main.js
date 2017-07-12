@@ -212,3 +212,21 @@ Parse.Cloud.define('findBestReplyMsg', function(request, response) {
     });
   }
 });
+
+Parse.Cloud.define("createCharArray", function(request, status) {
+  var MSG = Parse.Object.extend("Message");
+  var query = new Parse.Query(MSG);
+  query.limit(20);
+  query.find({
+    useMasterKey: true
+  }).then(function(res) {
+    for (var i = 0; i < res.length; i++) {
+      var msgArray = res[i].get('msg');
+      var msgChar = msgArray.join('');
+      let arr = Array.from(msgChar);
+      console.log(JSON.stringify(arr));
+    }
+  }, function(error) {
+    status.error("query unsuccessful, error:" + error.code + " " + error.message);
+  });
+});
