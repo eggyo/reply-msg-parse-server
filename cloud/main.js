@@ -226,7 +226,7 @@ Parse.Cloud.define('findBestReplyMsg', function(request, response) {
 Parse.Cloud.define("createCharArray", function(request, response) {
   var MSG = Parse.Object.extend("Message");
   var query = new Parse.Query(MSG);
-  query.limit(appQueryLimit);
+  query.limit(20);
   //query.equalTo('charSet',null);
   query.find({
     useMasterKey: true
