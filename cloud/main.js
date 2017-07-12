@@ -102,6 +102,9 @@ Parse.Cloud.define('botTraining', function(request, response) {
           var msgOBJ = new MSG();
           msgOBJ = msgResponse[0];
           for (var i = 0; i < msgFromUser.length; i++) {
+            var msgChar = msgFromUser[i].join('');
+            let arr = Array.from(msgChar);
+            msgOBJ.add("charSet",arr);
             msgOBJ.addUnique("msg", msgFromUser[i]);
           }
           for (var i = 0; i < replyMsgFromUser.length; i++) {
