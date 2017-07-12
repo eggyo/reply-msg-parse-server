@@ -229,11 +229,11 @@ Parse.Cloud.define("createCharArray", function(request, response) {
       var msgChar = msgArray.join('');
       let arr = Array.from(msgChar);
       console.log(JSON.stringify(arr));
-      response.success(JSON.stringify(arr));
-
       obj.set('charSet',arr);
       obj.save();
     }
+    response.success("done");
+
   }, function(error) {
     response.error("query unsuccessful, error:" + error.code + " " + error.message);
   });
