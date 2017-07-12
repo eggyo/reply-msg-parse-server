@@ -273,8 +273,9 @@ Parse.Cloud.define("findBestReplyMsgFromCharSet", function(request, response) {
             "replyMsg": ""
           });
         } else {
+          var randomMsgResponseIndex = Math.floor((Math.random() * msgResponse.length) + 0);
           console.log("all msgResponse:" + JSON.stringify(msgResponse));
-          contents = msgResponse[0].get("replyMsg");
+          contents = msgResponse[randomMsgResponseIndex].get("replyMsg");
           console.log("contents:" + contents);
           var replyCount = contents.length;
           console.log("replyCount:" + replyCount);
