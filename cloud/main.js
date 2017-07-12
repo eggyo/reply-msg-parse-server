@@ -220,6 +220,7 @@ Parse.Cloud.define("createCharArray", function(request, response) {
   var MSG = Parse.Object.extend("Message");
   var query = new Parse.Query(MSG);
   query.limit(appQueryLimit);
+  query.equalTo('charSet',null);
   query.find({
     useMasterKey: true
   }).then(function(res) {
