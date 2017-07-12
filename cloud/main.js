@@ -86,8 +86,9 @@ Parse.Cloud.define('botTraining', function(request, response) {
           msgOBJ.set("msg", msgFromUser);
           msgOBJ.set("replyMsg", replyMsgFromUser);
           var msgChar = msgFromUser.join('');
-          let arr = Array.from(msgChar);
-          msgOBJ.set("charSet",arr);
+          var wc = wordcut.cut(msgChar)
+          let arr = wc.split('|');
+          msgOBJ.set("wordsArray",arr);
           msgOBJ.save(null, {
             success: function(success) {
               response.success({
@@ -105,8 +106,9 @@ Parse.Cloud.define('botTraining', function(request, response) {
           msgOBJ = msgResponse[0];
           for (var i = 0; i < msgFromUser.length; i++) {
             var msgChar = msgFromUser[i].join('');
-            let arr = Array.from(msgChar);
-            msgOBJ.add("charSet",arr);
+            var wc = wordcut.cut(msgChar)
+            let arr = wc.split('|');
+            msgOBJ.addUnique("wordsArray",arr);
             msgOBJ.addUnique("msg", msgFromUser[i]);
           }
           for (var i = 0; i < replyMsgFromUser.length; i++) {
@@ -225,7 +227,7 @@ Parse.Cloud.define("createCharArray", function(request, response) {
   var MSG = Parse.Object.extend("Message");
   var query = new Parse.Query(MSG);
   query.limit(appQueryLimit);
-  query.equalTo('charSet',null);
+  //query.equalTo('charSet',null);
   query.find({
     useMasterKey: true
   }).then(function(res) {
@@ -233,9 +235,9 @@ Parse.Cloud.define("createCharArray", function(request, response) {
       var obj = res[i];
       var msgArray = res[i].get('msg');
       var msgChar = msgArray.join('');
-      let arr = Array.from(msgChar);
-      console.log(JSON.stringify(arr));
-      obj.set('charSet',arr);
+      var wc = wordcut.cut(msgChar)
+      let arr = wc.split('|');
+      obj.set("wordsArray",arr);
       obj.save();
     }
     response.success("done");
@@ -249,7 +251,8 @@ Parse.Cloud.define("findBestReplyMsgFromCharSet", function(request, response) {
   var MSG = Parse.Object.extend("Message");
   var query = new Parse.Query(MSG);
   var msgFromUser = request.params.msg;
-  let arr = Array.from(msgFromUser);
+  var wc = wordcut.cut(msgFromUser)
+  let arr = wc.split('|');
   console.log("wordcut:" + wordcut.cut(msgFromUser));
 
   console.log("request:" + request.params["msg"]);
@@ -259,7 +262,7 @@ Parse.Cloud.define("findBestReplyMsgFromCharSet", function(request, response) {
   if (msgFromUser == null) {
     response.error("request null values");
   } else {
-    query.containsAll("charSet", arr);
+    query.containedIn("wordsArray", arr);
     query.limit(appQueryLimit);
     query.find({
       success: function(msgResponse) {
