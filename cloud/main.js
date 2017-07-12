@@ -256,7 +256,7 @@ Parse.Cloud.define("findBestReplyMsgFromCharSet", function(request, response) {
   if (msgFromUser == null) {
     response.error("request null values");
   } else {
-    query.containedIn("charSet", arr);
+    query.containsAll("charSet", arr);
     query.limit(appQueryLimit);
     query.find({
       success: function(msgResponse) {
