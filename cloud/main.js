@@ -244,12 +244,13 @@ Parse.Cloud.define("createCharArray", function(request, response) {
           });
           return promise; // this will not be triggered until the whole loop above runs and all promises above are resolved
 
-        },
-        function(error) {
-          res.error("createCharArray error.code: " + error.code + " error.message: " + error.message);
+        }).then(function() {
+          //response.success(resultArray); // edit: changed to a capital A
+        }, function(error) {
+          response.error("script failed with error.code: " + error.code + " error.message: " + error.message);
         });
 
-      res.success('' + datas.length + ' createCharArray done');
+        request.success('' + res.length + ' has saved');
 /*
       for (var i = 0; i < res.length; i++) {
         var obj = res[i];
