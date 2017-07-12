@@ -246,11 +246,12 @@ Parse.Cloud.define("createCharArray", function(request, response) {
 
         }).then(function() {
           //response.success(resultArray); // edit: changed to a capital A
+          request.success('' + res.length + ' has saved');
+
         }, function(error) {
           response.error("script failed with error.code: " + error.code + " error.message: " + error.message);
         });
 
-        request.success('' + res.length + ' has saved');
 /*
       for (var i = 0; i < res.length; i++) {
         var obj = res[i];
