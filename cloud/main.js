@@ -233,18 +233,25 @@ Parse.Cloud.define("createCharArray", function(request, response) {
   query.find({
     useMasterKey: true
   }).then(function(res) {
+      var objs = [];
       for (var i = 0; i < res.length; i++) {
         var obj = res[i];
         var msgArray = res[i].get('msg');
         var msgChar = msgArray.join('');
         var wc = wordcut.cut(msgChar)
         let arr = wc.split('|');
-        //obj.set("wordsArray", arr);
-        //obj.save();
-        console.log("arr:" +JSON.stringify(arr));
-
+        obj.set("wordsArray", arr);
+        objs.push(obj);
+        console.log("arr:" + JSON.stringify(arr));
       }
-      response.success("done");
+      Parse.Object.saveAll(objs, {
+        success: function(result) {
+          response.success("done");
+        },
+        error: function(err) {
+          response.error("saveAll error:"+err.message);
+        }
+      });
 
     },
     function(error) {
