@@ -230,30 +230,26 @@ Parse.Cloud.define("createCharArray", function(request, response) {
   var query = new Parse.Query(MSG);
   query.limit(appQueryLimit);
   //query.equalTo('charSet',null);
-  query.each(function(object) {
-    // Do something with object
-    //object.save();
-    console.log(JSON.stringify(object.get('msg')));
-  }).then(function(success) {
-    response.success("OK");
-  }, function(err) {
-    response.error(err);
-  });
+  query.find({
+    useMasterKey: true
+  }).then(function(res) {
+      for (var i = 0; i < res.length; i++) {
+        var obj = res[i];
+        var msgArray = res[i].get('msg');
+        var msgChar = msgArray.join('');
+        var wc = wordcut.cut(msgChar)
+        let arr = wc.split('|');
+        //obj.set("wordsArray", arr);
+        //obj.save();
+        console.log("arr:" +JSON.stringify(arr));
 
+      }
+      response.success("done");
 
-  /*
-        for (var i = 0; i < res.length; i++) {
-          var obj = res[i];
-          var msgArray = res[i].get('msg');
-          var msgChar = msgArray.join('');
-          var wc = wordcut.cut(msgChar)
-          let arr = wc.split('|');
-          obj.set("wordsArray", arr);
-          obj.save();
-        }
-        response.success("done");
-  */
-
+    },
+    function(error) {
+      response.error("query unsuccessful, error:" + error.code + " " + error.message);
+    });
 });
 
 Parse.Cloud.define("findBestReplyMsgFromCharSet", function(request, response) {
