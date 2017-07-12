@@ -171,7 +171,7 @@ Parse.Cloud.define('findBestReplyMsg', function(request, response) {
   if (msgFromUser == null) {
     response.error("request null values");
   } else {
-    query.contains("msg", msgFromUser);
+    query.matches("msg", msgFromUser,'i');
     query.limit(appQueryLimit);
     query.find({
       success: function(msgResponse) {
@@ -182,8 +182,8 @@ Parse.Cloud.define('findBestReplyMsg', function(request, response) {
             "replyMsg": ""
           });
         } else {
+          console.log("all msgResponse:" + JSON.stringify(msgResponse));
           contents = msgResponse[0].get("replyMsg");
-          console.log("msgResponse:" + msgResponse);
           console.log("contents:" + contents);
           var replyCount = contents.length;
           console.log("replyCount:" + replyCount);
