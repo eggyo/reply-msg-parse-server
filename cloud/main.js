@@ -83,6 +83,9 @@ Parse.Cloud.define('botTraining', function(request, response) {
           var msgOBJ = new MSG();
           msgOBJ.set("msg", msgFromUser);
           msgOBJ.set("replyMsg", replyMsgFromUser);
+          var msgChar = msgFromUser.join('');
+          let arr = Array.from(msgChar);
+          msgOBJ.set("charSet",arr);
           msgOBJ.save(null, {
             success: function(success) {
               response.success({
@@ -216,7 +219,7 @@ Parse.Cloud.define('findBestReplyMsg', function(request, response) {
 Parse.Cloud.define("createCharArray", function(request, response) {
   var MSG = Parse.Object.extend("Message");
   var query = new Parse.Query(MSG);
-  query.limit(20);
+  query.limit(appQueryLimit);
   query.find({
     useMasterKey: true
   }).then(function(res) {
@@ -229,9 +232,7 @@ Parse.Cloud.define("createCharArray", function(request, response) {
       response.success(JSON.stringify(arr));
 
       obj.set('charSet',arr);
-      obj.save({
-        useMasterKey: true
-      });
+      obj.save();
     }
   }, function(error) {
     response.error("query unsuccessful, error:" + error.code + " " + error.message);
