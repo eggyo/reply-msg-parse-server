@@ -230,44 +230,30 @@ Parse.Cloud.define("createCharArray", function(request, response) {
   var query = new Parse.Query(MSG);
   query.limit(appQueryLimit);
   //query.equalTo('charSet',null);
-  query.find({
-    useMasterKey: true
-  }).then(function(res) {
-      return Parse.Promise.as().then(function() { // this just gets the ball rolling
-          var promise = Parse.Promise.as(); // define a promise
+  query.each(function(object) {
+    // Do something with object
+    //object.save();
+    console.log(JSON.stringify(object.get('msg')));
+  }).then(function(success) {
+    request.success("OK");
+  }, function(err) {
+    request.error(err);
+  });
 
-          _.each(res, function(obj) { // use underscore, its better :)
-            promise = promise.then(function() { // each time this loops the promise gets reassigned to the function below
-              console.log("obj msg:" + JSON.stringify(obj.get('msg')));
 
-            }); // edit: missing these guys
-          });
-          return promise; // this will not be triggered until the whole loop above runs and all promises above are resolved
+  /*
+        for (var i = 0; i < res.length; i++) {
+          var obj = res[i];
+          var msgArray = res[i].get('msg');
+          var msgChar = msgArray.join('');
+          var wc = wordcut.cut(msgChar)
+          let arr = wc.split('|');
+          obj.set("wordsArray", arr);
+          obj.save();
+        }
+        response.success("done");
+  */
 
-        }).then(function() {
-          //response.success(resultArray); // edit: changed to a capital A
-          response.success('' + res.length + ' has saved');
-
-        }, function(error) {
-          response.error("script failed with error.code: " + error.code + " error.message: " + error.message);
-        });
-
-/*
-      for (var i = 0; i < res.length; i++) {
-        var obj = res[i];
-        var msgArray = res[i].get('msg');
-        var msgChar = msgArray.join('');
-        var wc = wordcut.cut(msgChar)
-        let arr = wc.split('|');
-        obj.set("wordsArray", arr);
-        obj.save();
-      }
-      response.success("done");
-*/
-    },
-    function(error) {
-      response.error("query unsuccessful, error:" + error.code + " " + error.message);
-    });
 });
 
 Parse.Cloud.define("findBestReplyMsgFromCharSet", function(request, response) {
