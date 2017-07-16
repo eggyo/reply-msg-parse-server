@@ -183,7 +183,7 @@ Parse.Cloud.define('findBestReplyMsg', function(request, response) {
   if (msgFromUser == null) {
     response.error("request null values");
   } else {
-    query.matches("msg", msgFromUser, 'i');
+    query.matches("msg", '.*' + msgFromUser + '.*', 'i');
     query.limit(appQueryLimit);
     query.find({
       success: function(msgResponse) {
