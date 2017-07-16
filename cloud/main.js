@@ -338,6 +338,8 @@ Parse.Cloud.define("findBestMsgFromUnknow", function(request, response) {
           getReplyMsg('{"msg":"' + target + '"}', {
             success: function(result) {
               console.log("result:" + JSON.stringify(result));
+              console.log("result bestMatch:" + target);
+
               response.success({
                 "msg": msgFromUser,
                 "replyMsg": result.result.replyMsg
@@ -346,7 +348,6 @@ Parse.Cloud.define("findBestMsgFromUnknow", function(request, response) {
             error: function(error) {
               response.error(error);
             }
-            console.log("result bestMatch:" + target);
           });
         }
         //response.success(msgResponse);
