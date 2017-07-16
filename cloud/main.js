@@ -19,55 +19,11 @@ Parse.Cloud.define('testMsg', function(req, res) {
 });
 
 Parse.Cloud.define('getReplyMsg', function(request, response) {
-  var MSG = Parse.Object.extend("Message");
-  var query = new Parse.Query(MSG);
-  var msgFromUser = request.params.msg;
-  console.log("request:" + request.params["msg"]);
-  console.log("msg from user:" + msgFromUser);
-  if (msgFromUser == null) {
-    response.error("request null values");
-  } else {
-    query.equalTo("msg", msgFromUser);
-    query.limit(appQueryLimit);
-    query.find({
-      success: function(msgResponse) {
-        var contents = [];
-        if (msgResponse.length == 0) {
-          response.success({
-            "msg": msgFromUser,
-            "replyMsg": ""
-          });
-        } else {
-          contents = msgResponse[0].get("replyMsg");
-          console.log("msgResponse:" + msgResponse);
-          console.log("contents:" + contents);
-          var replyCount = contents.length;
-          console.log("replyCount:" + replyCount);
-          if (replyCount == 0) {
-            response.success({
-              "msg": msgFromUser,
-              "replyMsg": ""
-            });
-            console.log("resultReplyMsg:" + "0");
-          } else {
-            var randomIndex = Math.floor((Math.random() * replyCount) + 0);
-            console.log("randomIndex:" + randomIndex);
-            var resultReplyMsg = contents[randomIndex].toString();
-            response.success({
-              "msg": msgFromUser,
-              "replyMsg": resultReplyMsg
-            });
-            console.log("resultReplyMsg:" + resultReplyMsg);
-          }
-        }
-        //response.success(msgResponse);
-      },
-      error: function() {
-        response.error("get replyMsg failed");
-      }
-    });
-  }
+  getReplyMsg(request, function(res) {
+    response(res);
+  });
 });
+
 
 Parse.Cloud.define('botTraining', function(request, response) {
   var MSG = Parse.Object.extend("Message");
@@ -373,7 +329,7 @@ Parse.Cloud.define("findBestMsgFromUnknow", function(request, response) {
           console.log("matches:" + JSON.stringify(matches));
           console.log("best matches:" + JSON.stringify(matches.bestMatch));
           var target = matches.bestMatch.target;
-          Parse.Cloud.run('getReplyMsg', '{"msg":"' + target + '"}', function(res) {
+          getReplyMsg('{"msg":"' + target + '"}', function(res) {
             response.success({
               "msg": msgFromUser,
               "replyMsg": res.result.replyMsg
@@ -442,3 +398,54 @@ Parse.Cloud.define("createMsgFromUnknow", function(request, response) {
       response.error("query unsuccessful, error:" + error.code + " " + error.message);
     });
 });
+
+function getReplyMsg(request, response) {
+  var MSG = Parse.Object.extend("Message");
+  var query = new Parse.Query(MSG);
+  var msgFromUser = request.params.msg;
+  console.log("request:" + request.params["msg"]);
+  console.log("msg from user:" + msgFromUser);
+  if (msgFromUser == null) {
+    response.error("request null values");
+  } else {
+    query.equalTo("msg", msgFromUser);
+    query.limit(appQueryLimit);
+    query.find({
+      success: function(msgResponse) {
+        var contents = [];
+        if (msgResponse.length == 0) {
+          response.success({
+            "msg": msgFromUser,
+            "replyMsg": ""
+          });
+        } else {
+          contents = msgResponse[0].get("replyMsg");
+          console.log("msgResponse:" + msgResponse);
+          console.log("contents:" + contents);
+          var replyCount = contents.length;
+          console.log("replyCount:" + replyCount);
+          if (replyCount == 0) {
+            response.success({
+              "msg": msgFromUser,
+              "replyMsg": ""
+            });
+            console.log("resultReplyMsg:" + "0");
+          } else {
+            var randomIndex = Math.floor((Math.random() * replyCount) + 0);
+            console.log("randomIndex:" + randomIndex);
+            var resultReplyMsg = contents[randomIndex].toString();
+            response.success({
+              "msg": msgFromUser,
+              "replyMsg": resultReplyMsg
+            });
+            console.log("resultReplyMsg:" + resultReplyMsg);
+          }
+        }
+        //response.success(msgResponse);
+      },
+      error: function() {
+        response.error("get replyMsg failed");
+      }
+    });
+  }
+}
