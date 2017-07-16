@@ -335,10 +335,11 @@ Parse.Cloud.define("findBestMsgFromUnknow", function(request, response) {
           console.log("matches:" + JSON.stringify(matches));
           console.log("best matches:" + JSON.stringify(matches.bestMatch));
           var target = matches.bestMatch.target;
+          console.log("result bestMatch target:" + target);
+
           getReplyMsg('{"msg":"' + target + '"}', {
             success: function(result) {
               console.log("result:" + JSON.stringify(result));
-              console.log("result bestMatch:" + target);
 
               response.success({
                 "msg": msgFromUser,
