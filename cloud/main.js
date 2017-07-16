@@ -19,8 +19,14 @@ Parse.Cloud.define('testMsg', function(req, res) {
 });
 
 Parse.Cloud.define('getReplyMsg', function(request, response) {
-  getReplyMsg(request, function(res) {
-    response(res);
+  getReplyMsg(request, {
+    success: function(result) {
+      // Do stuff with users
+      response.success(result);
+    },
+    error: function(error) {
+      response.error(error);
+    }
   });
 });
 
