@@ -322,8 +322,6 @@ Parse.Cloud.define("findBestMsgFromUnknow", function(request, response) {
             "bestMatch": ""
           });
         } else {
-          var randomMsgResponseIndex = Math.floor((Math.random() * msgResponse.length) + 0);
-          console.log("all msgResponse:" + JSON.stringify(msgResponse));
           var msgArray = [];
           _.each(msgResponse, function(obj) {
             var msgs = obj.get('msg');
@@ -340,10 +338,9 @@ Parse.Cloud.define("findBestMsgFromUnknow", function(request, response) {
           getReplyMsg('{"msg":"' + target + '"}', {
             success: function(result) {
               console.log("result:" + JSON.stringify(result));
-
               response.success({
                 "msg": msgFromUser,
-                "replyMsg": result.result.replyMsg
+                "replyMsg": ""
               });
             },
             error: function(error) {
