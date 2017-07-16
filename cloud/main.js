@@ -302,7 +302,6 @@ Parse.Cloud.define("findBestReplyMsgFromCharSet", function(request, response) {
           var matches = stringSimilarity.findBestMatch(msgFromUser, msgArray);
           console.log("matches:" + JSON.stringify(matches));
           console.log("best matches:" + JSON.stringify(matches.bestMatch));
-
           contents = msgResponse[randomMsgResponseIndex].get("replyMsg");
           console.log("contents:" + contents);
           var replyCount = contents.length;
@@ -332,6 +331,60 @@ Parse.Cloud.define("findBestReplyMsgFromCharSet", function(request, response) {
     });
   }
 });
+
+Parse.Cloud.define("findBestMsgFromUnknow", function(request, response) {
+  var MSG = Parse.Object.extend("Message");
+  var query = new Parse.Query(MSG);
+  var msgFromUser = request.params.msg;
+  var wc = wordcut.cut(msgFromUser)
+  let arr = wc.split('|');
+  console.log("wordcut:" + wordcut.cut(msgFromUser));
+  console.log("request:" + request.params["msg"]);
+  console.log("msg from user:" + msgFromUser);
+  console.log("arr:" + JSON.stringify(arr));
+
+  if (msgFromUser == null) {
+    response.error("request null values");
+  } else {
+    query.containedIn("wordsArray", arr);
+    query.limit(appQueryLimit);
+    query.find({
+      success: function(msgResponse) {
+        var contents = [];
+        if (msgResponse.length == 0) {
+          response.success({
+            "msg": msgFromUser,
+            "bestMatch": ""
+          });
+        } else {
+          var randomMsgResponseIndex = Math.floor((Math.random() * msgResponse.length) + 0);
+          console.log("all msgResponse:" + JSON.stringify(msgResponse));
+          var msgArray = [];
+          _.each(msgResponse, function(obj) {
+              var msgs = obj.get('msg');
+              _.each(msgs, function(msg) {
+                  msgArray.push(msg);
+              });
+          });
+          var matches = stringSimilarity.findBestMatch(msgFromUser, msgArray);
+          console.log("matches:" + JSON.stringify(matches));
+          console.log("best matches:" + JSON.stringify(matches.bestMatch));
+          var target = matches.bestMatch.target;
+          response.success({
+            "msg": msgFromUser,
+            "bestMatch": target
+          });
+          console.log("result bestMatch:" + target);
+        }
+        //response.success(msgResponse);
+      },
+      error: function() {
+        response.error("get replyMsg failed");
+      }
+    });
+  }
+});
+
 
 Parse.Cloud.define("createMsgFromUnknow", function(request, response) {
   var MSG = Parse.Object.extend("Message");
