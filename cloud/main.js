@@ -1,6 +1,7 @@
 var appQueryLimit = 9999;
 var wordcut = require("wordcut");
 var _ = require('underscore');
+var stringSimilarity = require('string-similarity');
 
 wordcut.init();
 
@@ -291,6 +292,17 @@ Parse.Cloud.define("findBestReplyMsgFromCharSet", function(request, response) {
         } else {
           var randomMsgResponseIndex = Math.floor((Math.random() * msgResponse.length) + 0);
           console.log("all msgResponse:" + JSON.stringify(msgResponse));
+          var msgArray = [];
+          _.each(msgResponse, function(obj) {
+              var msgs = obj.get('msg');
+              _.each(msgs, function(msg) {
+                  msgArray.push(msg);
+              });
+          });
+          var matches = stringSimilarity.findBestMatch(msgFromUser, msgArray);
+          console.log("matches:" + JSON.stringify(matches));
+          console.log("best matches:" + JSON.stringify(matches.bestMatch));
+
           contents = msgResponse[randomMsgResponseIndex].get("replyMsg");
           console.log("contents:" + contents);
           var replyCount = contents.length;
