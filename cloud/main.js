@@ -187,7 +187,7 @@ Parse.Cloud.define('findBestReplyMsg', function(request, response) {
     let arr = wc.split('|');
     var msgChar = arr.join('.*');
 
-    query.matches("msg", '.*' + msgChar + '.*', 'i');
+    query.matches("msg", '.*' + msgChar + '.*');
     query.limit(appQueryLimit);
     query.find({
       success: function(msgResponse) {
