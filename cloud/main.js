@@ -319,7 +319,7 @@ Parse.Cloud.define("findBestReplyMsgFromCharSet", function(request, response) {
 
 Parse.Cloud.define("createMsgFromUnknow", function(request, response) {
   var MSG = Parse.Object.extend("Message");
-  var UNMSG = Parse.Object.extend("UnknowMessage");
+  var UNMSG = Parse.Object.extend("UnknownMessage");
   var query = new Parse.Query(UNMSG);
   query.limit(appQueryLimit);
   query.notEqualTo('replyMsg',null);
