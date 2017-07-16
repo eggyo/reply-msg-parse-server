@@ -335,11 +335,17 @@ Parse.Cloud.define("findBestMsgFromUnknow", function(request, response) {
           console.log("matches:" + JSON.stringify(matches));
           console.log("best matches:" + JSON.stringify(matches.bestMatch));
           var target = matches.bestMatch.target;
-          getReplyMsg('{"msg":"' + target + '"}', function(res) {
-            response.success({
-              "msg": msgFromUser,
-              "replyMsg": res.result.replyMsg
-            });
+          getReplyMsg('{"msg":"' + target + '"}', {
+            success: function(result) {
+              console.log("result:" + JSON.stringify(result));
+              response.success({
+                "msg": msgFromUser,
+                "replyMsg": result.result.replyMsg
+              });
+            },
+            error: function(error) {
+              response.error(error);
+            }
             console.log("result bestMatch:" + target);
           });
         }
