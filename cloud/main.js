@@ -141,7 +141,9 @@ Parse.Cloud.define('botTraining', function(request, response) {
 Parse.Cloud.define('createUnknowMsg', function(request, response) {
   var MSG = Parse.Object.extend("UnknownMessage");
   var msgFromUser = request.params.msg;
-  console.log("msg from user:" + msgFromUser);
+  var replyMsgFromUser = request.params.replyMsg;
+
+  console.log("msg from user:" + msgFromUser + "\nreplyMsgFromUser:" + replyMsgFromUser);
   if (msgFromUser == null) {
     response.error("request null values");
   } else {
@@ -155,6 +157,7 @@ Parse.Cloud.define('createUnknowMsg', function(request, response) {
           // add new msg
           var msgOBJ = new MSG();
           msgOBJ.set("msg", msgFromUser);
+          msgOBJ.set("replyMsg", replyMsgFromUser);
           msgOBJ.save(null, {
             success: function(success) {
               response.success({
@@ -254,7 +257,7 @@ Parse.Cloud.define("createCharArray", function(request, response) {
           response.success("done");
         },
         error: function(err) {
-          response.error("saveAll error:"+err.message);
+          response.error("saveAll error:" + err.message);
         }
       });
 
@@ -294,10 +297,10 @@ Parse.Cloud.define("findBestReplyMsgFromCharSet", function(request, response) {
           console.log("all msgResponse:" + JSON.stringify(msgResponse));
           var msgArray = [];
           _.each(msgResponse, function(obj) {
-              var msgs = obj.get('msg');
-              _.each(msgs, function(msg) {
-                  msgArray.push(msg);
-              });
+            var msgs = obj.get('msg');
+            _.each(msgs, function(msg) {
+              msgArray.push(msg);
+            });
           });
           var matches = stringSimilarity.findBestMatch(msgFromUser, msgArray);
           console.log("matches:" + JSON.stringify(matches));
@@ -361,20 +364,22 @@ Parse.Cloud.define("findBestMsgFromUnknow", function(request, response) {
           console.log("all msgResponse:" + JSON.stringify(msgResponse));
           var msgArray = [];
           _.each(msgResponse, function(obj) {
-              var msgs = obj.get('msg');
-              _.each(msgs, function(msg) {
-                  msgArray.push(msg);
-              });
+            var msgs = obj.get('msg');
+            _.each(msgs, function(msg) {
+              msgArray.push(msg);
+            });
           });
           var matches = stringSimilarity.findBestMatch(msgFromUser, msgArray);
           console.log("matches:" + JSON.stringify(matches));
           console.log("best matches:" + JSON.stringify(matches.bestMatch));
           var target = matches.bestMatch.target;
-          response.success({
-            "msg": msgFromUser,
-            "bestMatch": target
+          Parse.Cloud.run('getReplyMsg', '{"msg":"' + target + '"}', function(res) {
+            response.success({
+              "msg": msgFromUser,
+              "replyMsg": res.result.replyMsg
+            });
+            console.log("result bestMatch:" + target);
           });
-          console.log("result bestMatch:" + target);
         }
         //response.success(msgResponse);
       },
@@ -391,7 +396,7 @@ Parse.Cloud.define("createMsgFromUnknow", function(request, response) {
   var UNMSG = Parse.Object.extend("UnknownMessage");
   var query = new Parse.Query(UNMSG);
   query.limit(appQueryLimit);
-  query.notEqualTo('replyMsg',null);
+  query.notEqualTo('replyMsg', null);
   query.find({
     useMasterKey: true
   }).then(function(res) {
@@ -422,12 +427,12 @@ Parse.Cloud.define("createMsgFromUnknow", function(request, response) {
               console.log("save and destroyAll done");
             },
             error: function(err) {
-              response.error("destroyAll error:"+err.message);
+              response.error("destroyAll error:" + err.message);
             }
           });
         },
         error: function(err) {
-          response.error("saveAll error:"+err.message);
+          response.error("saveAll error:" + err.message);
         }
       });
 
