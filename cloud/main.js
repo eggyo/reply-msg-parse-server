@@ -316,3 +316,55 @@ Parse.Cloud.define("findBestReplyMsgFromCharSet", function(request, response) {
     });
   }
 });
+
+Parse.Cloud.define("createMsgFromUnknow", function(request, response) {
+  var MSG = Parse.Object.extend("Message");
+  var UNMSG = Parse.Object.extend("UnknowMessage");
+  var query = new Parse.Query(UNMSG);
+  query.limit(appQueryLimit);
+  query.notEqualTo('replyMsg',null);
+  query.find({
+    useMasterKey: true
+  }).then(function(res) {
+      var objs = [];
+      var removeobjs = [];
+
+      for (var i = 0; i < res.length; i++) {
+        var obj = res[i];
+        var msgArray = res[i].get('msg');
+        var replyMsgArray = res[i].get('replyMsg');
+        var msgChar = msgArray.join('');
+        var wc = wordcut.cut(msgChar)
+        let arr = wc.split('|');
+        var msgObj = new MSG();
+        msgObj.set("wordsArray", arr);
+        msgObj.set("msg", msgArray);
+        msgObj.set("replyMsg", replyMsgArray);
+
+        objs.push(msgObj);
+        removeobjs.push(obj);
+      }
+      Parse.Object.saveAll(objs, {
+        success: function(result) {
+          console.log("saveAll done");
+          Parse.Object.destroyAll(removeobjs, {
+            success: function(result) {
+              response.success("save and destroyAll done");
+              console.log("save and destroyAll done");
+            },
+            error: function(err) {
+              response.error("destroyAll error:"+err.message);
+            }
+          });
+        },
+        error: function(err) {
+          response.error("saveAll error:"+err.message);
+        }
+      });
+
+
+    },
+    function(error) {
+      response.error("query unsuccessful, error:" + error.code + " " + error.message);
+    });
+});
