@@ -316,7 +316,7 @@ Parse.Cloud.define("findBestMsgFromUnknow", function(request, response) {
     query.find({
       success: function(msgResponse) {
         var contents = [];
-        if (msgResponse.length == 0) {
+        if (msgResponse.length == 0 || msgResponse == null) {
           response.success({
             "msg": msgFromUser,
             "bestMatch": ""
