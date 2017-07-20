@@ -319,7 +319,7 @@ Parse.Cloud.define("findBestMsgFromUnknow", function(request, response) {
         if (msgResponse.length == 0 || msgResponse == null) {
           response.success({
             "msg": msgFromUser,
-            "bestMatch": ""
+            "replyMsg": ""
           });
         } else {
           var msgArray = [];
