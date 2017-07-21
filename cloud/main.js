@@ -70,7 +70,7 @@ Parse.Cloud.define('botTraining', function(request, response) {
           var msgOBJ = new MSG();
           msgOBJ = msgResponse[0];
           for (var i = 0; i < msgFromUser.length; i++) {
-            var msgChar = msgFromUser[i].join('');
+            var msgChar = msgFromUser[i];
             var wc = wordcut.cut(msgChar)
             let arr = wc.split('|');
             msgOBJ.addUnique("wordsArray", arr);
