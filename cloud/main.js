@@ -418,8 +418,6 @@ function getReplyMsg(request, response) {
   var MSG = Parse.Object.extend("Message");
   var query = new Parse.Query(MSG);
   var msgFromUser = request.params.msg;
-  msgFromUser = msgFromUser.replace(/\r?\n|\r/g, "");
-
   console.log("request:" + request.params["msg"]);
   console.log("msg from user:" + msgFromUser);
   if (msgFromUser == null) {
