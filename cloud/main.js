@@ -1,4 +1,4 @@
-var appQueryLimit = 9999;
+var appQueryLimit = 99999;
 var wordcut = require("wordcut");
 var _ = require('underscore');
 var stringSimilarity = require('string-similarity');
