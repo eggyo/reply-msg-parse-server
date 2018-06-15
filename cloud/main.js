@@ -366,8 +366,10 @@ Parse.Cloud.define("findBestMsgFromUnknow", function(request, response) {
 Parse.Cloud.define("createMsgFromUnknow", function(request, response) {
   var MSG = Parse.Object.extend("Message");
   var UNMSG = Parse.Object.extend("UnknownMessage");
+  var limit = request.params.limit;
+
   var query = new Parse.Query(UNMSG);
-  query.limit(appQueryLimitMin);
+  query.limit(limit);
   query.notEqualTo('replyMsg', null);
   query.find({
     useMasterKey: true
