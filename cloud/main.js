@@ -504,7 +504,7 @@ function chain1(response){
         }
         Parse.Object.saveAll(objs, {
           success: function(result) {
-            //console.log("saveAll done");
+            console.log("saveAll done");
             Parse.Object.destroyAll(removeobjs, {
               success: function(result) {
                 //response.success("chain1 done and run chain2");
@@ -569,7 +569,7 @@ function chain2(response){
         }
         Parse.Object.saveAll(objs, {
           success: function(result) {
-            //console.log("saveAll done");
+            console.log("saveAll done");
             Parse.Object.destroyAll(removeobjs, {
               success: function(result) {
                 //response.success("chain2 done and run chain1");
