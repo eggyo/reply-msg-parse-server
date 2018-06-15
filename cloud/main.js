@@ -1,4 +1,5 @@
 var appQueryLimit = 99999;
+var appQueryLimitMin = 10000;
 var wordcut = require("wordcut");
 var _ = require('underscore');
 var stringSimilarity = require('string-similarity');
@@ -366,7 +367,7 @@ Parse.Cloud.define("createMsgFromUnknow", function(request, response) {
   var MSG = Parse.Object.extend("Message");
   var UNMSG = Parse.Object.extend("UnknownMessage");
   var query = new Parse.Query(UNMSG);
-  query.limit(appQueryLimit);
+  query.limit(appQueryLimitMin);
   query.notEqualTo('replyMsg', null);
   query.find({
     useMasterKey: true
