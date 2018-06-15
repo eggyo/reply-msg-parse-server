@@ -482,8 +482,11 @@ function chain1(response){
       var removeobjs = [];
       if(res.length == 0){
         response.success("chain1 done");
+        console.log(" chain1 res 0");
 
       }else {
+        console.log(" chain1 res.length:" +res.length);
+
         for (var i = 0; i < res.length; i++) {
           var obj = res[i];
           var msgArray = res[i].get('msg');
@@ -543,9 +546,12 @@ function chain2(response){
       var objs = [];
       var removeobjs = [];
       if(res.length == 0){
-        response.success("chain1 done");
+        response.success("chain2 done");
+        console.log(" chain2 res 0");
 
       }else {
+        console.log(" chain2 res.length:" +res.length);
+
         for (var i = 0; i < res.length; i++) {
           var obj = res[i];
           var msgArray = res[i].get('msg');
