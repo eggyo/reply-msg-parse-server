@@ -1,0 +1,6 @@
+#!/bin/bash
+cd /Users/copperwired/documents/Parse/reply-msg-parse-server
+
+git add * -f
+git commit -am "v.1"
+git push heroku master
