@@ -514,14 +514,14 @@ function chain1(response){
                 console.log(" chain1 done and run chain2");
               },
               error: function(err) {
-                console.log(" chain1  err.message:" +  err.message);
+                console.log(" chain1  err.message:" +  err.message + " code :" + err.code);
 
                 //response.error("destroyAll error:" + err.message);
               }
             });
           },
           error: function(err) {
-            console.log(" chain1  err.message:" +  err.message);
+            console.log(" chain1  err.message:" +  err.message + " code :" + err.code);
 
             //response.error("saveAll error:" + err.message);
           }
