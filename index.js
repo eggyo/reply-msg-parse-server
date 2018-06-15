@@ -2,17 +2,17 @@
 // compatible API routes.
 const throng = require('throng');
 const WORKERS = process.env.WEB_CONCURRENCY || 4;
-var express = require('express');
-var ParseServer = require('parse-server').ParseServer;
-var path = require('path');
-var ParseDashboard = require('parse-dashboard');
+
 
 throng({
   workers: WORKERS,
   lifetime: Infinity
 }, start);
 function start() {
-
+  var express = require('express');
+  var ParseServer = require('parse-server').ParseServer;
+  var path = require('path');
+  var ParseDashboard = require('parse-dashboard');
   var databaseUri = process.env.DATABASE_URI || process.env.MONGODB_URI;
 
   if (!databaseUri) {
