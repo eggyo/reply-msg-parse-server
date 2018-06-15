@@ -511,19 +511,23 @@ function chain1(response){
                 console.log(" chain1 done and run chain2");
               },
               error: function(err) {
-                response.error("destroyAll error:" + err.message);
+                console.log(" chain1  err.message:" +  err.message);
+
+                //response.error("destroyAll error:" + err.message);
               }
             });
           },
           error: function(err) {
-            response.error("saveAll error:" + err.message);
+            console.log(" chain1  err.message:" +  err.message);
+
+            //response.error("saveAll error:" + err.message);
           }
         });
 
       }
     },
     function(error) {
-      response.error("query unsuccessful, error:" + error.code + " " + error.message);
+      console.log("query unsuccessful, error:" + error.code + " " + error.message);
     });
 }
 
@@ -569,19 +573,23 @@ function chain2(response){
                 console.log(" chain2 done and run chain1");
               },
               error: function(err) {
-                response.error("destroyAll error:" + err.message);
+                //response.error("destroyAll error:" + err.message);
+                console.log(" chain2  err.message:" +  err.message);
+
               }
             });
           },
           error: function(err) {
-            response.error("saveAll error:" + err.message);
+            //response.error("saveAll error:" + err.message);
+            console.log(" chain2  err.message:" +  err.message);
+
           }
         });
 
       }
     },
     function(error) {
-      response.error("query unsuccessful, error:" + error.code + " " + error.message);
+      console.log("query unsuccessful, error:" + error.code + " " + error.message);
     });
 }
 
