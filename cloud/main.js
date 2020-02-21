@@ -469,7 +469,7 @@ function getReplyMsg(request, response) {
 }
 
 
-function chain1(response){
+function chain1(response) {
   var MSG = Parse.Object.extend("Message");
   var UNMSG = Parse.Object.extend("UnknownMessage");
   var query = new Parse.Query(UNMSG);
@@ -480,12 +480,12 @@ function chain1(response){
   }).then(function(res) {
       var objs = [];
       var removeobjs = [];
-      if(res.length == 0){
+      if (res.length == 0) {
         response.success("chain1 done");
         console.log(" chain1 res 0");
 
-      }else {
-        console.log(" chain1 res.length:" +res.length);
+      } else {
+        console.log(" chain1 res.length:" + res.length);
 
         for (var i = 0; i < res.length; i++) {
           var obj = res[i];
@@ -508,20 +508,20 @@ function chain1(response){
             Parse.Object.destroyAll(removeobjs, {
               success: function(result) {
                 //response.success("chain1 done and run chain2");
-                chain2(function(r){
+                chain2(function(r) {
 
                 });
                 console.log(" chain1 done and run chain2");
               },
               error: function(err) {
-                console.log(" chain1  err.message:" +  err.message + " code :" + err.code);
+                console.log(" chain1  err.message:" + err.message + " code :" + err.code);
 
                 //response.error("destroyAll error:" + err.message);
               }
             });
           },
           error: function(err) {
-            console.log(" chain1  err.message:" +  err.message + " code :" + err.code);
+            console.log(" chain1  err.message:" + err.message + " code :" + err.code);
 
             //response.error("saveAll error:" + err.message);
           }
@@ -534,7 +534,7 @@ function chain1(response){
     });
 }
 
-function chain2(response){
+function chain2(response) {
   var MSG = Parse.Object.extend("Message");
   var UNMSG = Parse.Object.extend("UnknownMessage");
   var query = new Parse.Query(UNMSG);
@@ -545,12 +545,12 @@ function chain2(response){
   }).then(function(res) {
       var objs = [];
       var removeobjs = [];
-      if(res.length == 0){
+      if (res.length == 0) {
         response.success("chain2 done");
         console.log(" chain2 res 0");
 
-      }else {
-        console.log(" chain2 res.length:" +res.length);
+      } else {
+        console.log(" chain2 res.length:" + res.length);
 
         for (var i = 0; i < res.length; i++) {
           var obj = res[i];
@@ -573,21 +573,21 @@ function chain2(response){
             Parse.Object.destroyAll(removeobjs, {
               success: function(result) {
                 //response.success("chain2 done and run chain1");
-                chain1(function(r){
+                chain1(function(r) {
 
                 });
                 console.log(" chain2 done and run chain1");
               },
               error: function(err) {
                 //response.error("destroyAll error:" + err.message);
-                console.log(" chain2  err.message:" +  err.message);
+                console.log(" chain2  err.message:" + err.message);
 
               }
             });
           },
           error: function(err) {
             //response.error("saveAll error:" + err.message);
-            console.log(" chain2  err.message:" +  err.message);
+            console.log(" chain2  err.message:" + err.message);
 
           }
         });
@@ -601,7 +601,7 @@ function chain2(response){
 
 
 Parse.Cloud.define("runchain", function(request, response) {
-  chain1(function(res){
+  chain1(function(res) {
     response.success(res);
   });
 });
