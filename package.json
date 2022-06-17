@@ -14,7 +14,7 @@
     "node-gyp": "^3.7.0",
     "parse": "~1.8.0",
     "parse-dashboard": "^1.0.26",
-    "parse-server": "^2.2.25",
+    "parse-server": "^4.10.11",
     "string-similarity": "^1.2.0",
     "throng": "^4.0.0",
     "wordcut": "^0.8.0"
